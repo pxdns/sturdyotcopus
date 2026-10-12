@@ -3,15 +3,138 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark light" />
-    <title>Web VS Code</title>
-    <link rel="icon" href="data:," />
-    <style>
-      html, body, #app { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
-    </style>
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>{{name}} - an IDE that runs in a browser tab</title>
+    <meta name="description" content="{{description}}" />
+    <meta property="og:title" content="{{name}} - an IDE that runs in a browser tab" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">{{name}}</p>
+          <h1>An IDE that runs in a browser tab.</h1>
+          <p class="dek">A full code editor, a Python interpreter, Java and Gradle tooling, GitHub sync and an AI assistant, with nothing to install. Open it, sign in, keep working.</p>
+        </header>
+        <div class="wrap-actions">
+            <div class="actions">
+              <a class="btn solid" href="/app/">Open the IDE</a>
+              <a class="btn" href="/app/" data-launch="popup">Popup window</a>
+              <a class="btn" href="/app/" data-launch="blank">about:blank window</a>
+            </div>
+        </div>
+        <figure style="margin:44px 0 56px">
+          <img src="/screenshots/ide-dark.png" width="1400" height="850" alt="The IDE with the explorer, two editors side by side and the status bar." />
+          <figcaption>Fig. 1. The IDE in a desktop browser. Workspace files are stored in the browser.</figcaption>
+        </figure>
+        <section class="sec">
+          <p class="label"><b>01</b>What it is</p>
+          <div class="body prose">
+            <h2>A desktop editor, delivered as a web page</h2>
+            <p>The editor is the open-source Code&nbsp;-&nbsp;OSS workbench: the command palette, split editors, search, settings, keybindings and the extension model are the ones you already know. We add the parts that make it useful without an installer: Python that runs in the page, Java and Gradle tooling, GitHub sync, an AI assistant and a catalog of extensions that actually work on the web.</p>
+            <p>It is meant for places where installing a toolchain is slow or not allowed: a school lab, a borrowed laptop, a locked-down work machine, a tablet.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Capabilities</p>
+          <div class="body">
+            <div class="table-scroll"><table class="table">
+              <thead><tr><th>Area</th><th>What you get</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td><a href="/features/">Editor</a></td><td>Full workbench, split view, search, settings, Glass and charcoal themes.</td><td>{{status:workbench}}</td></tr>
+                <tr><td><a href="/python/">Python</a></td><td>Run files in the page, input prompts, live syntax errors, outline, completion.</td><td>{{status:python}}</td></tr>
+                <tr><td><a href="/java-gradle/">Java</a></td><td>Parser-based syntax errors, structure view, snippets.</td><td>{{status:java}}</td></tr>
+                <tr><td><a href="/java-gradle/">Gradle</a></td><td>Build file outline, snippets, inspections, tasks run in the runner.</td><td>{{status:gradle}}</td></tr>
+                <tr><td><a href="/github/">GitHub</a></td><td>OAuth sign-in, open a repository, last workspace restored, automatic commits.</td><td>{{status:github}}</td></tr>
+                <tr><td><a href="/ai/">AI assistant</a></td><td>Chat panel, agent mode with approved writes, optional suggestions, with your own key.</td><td>{{status:ai}}</td></tr>
+                <tr><td><a href="/extensions/">Extensions</a></td><td>A catalog of extensions that run in a browser, filtered at build time.</td><td>{{status:marketplace}}</td></tr>
+                <tr><td><a href="/runner/">Remote runner</a></td><td>A real terminal, a JDK, Gradle and Node, for builds and agent CLIs.</td><td>{{status:runner}}</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Where things run</p>
+          <div class="body">
+            <div class="diagram">
+              <svg viewBox="0 0 960 312" role="img" aria-labelledby="dg-t dg-d" fill="none" stroke="currentColor" stroke-width="2">
+                <title id="dg-t">Where each part of the IDE runs</title>
+                <desc id="dg-d">Most of the IDE runs inside your browser tab. It talks to GitHub and to your AI provider with your own credentials, and optionally to a remote runner for terminals and builds.</desc>
+                <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="currentColor" stroke="none"/></marker></defs>
+                <g stroke="none" font-size="12" letter-spacing="1"><text x="20" y="28">YOUR BROWSER TAB</text><text x="500" y="28">YOUR ACCOUNTS</text><text x="770" y="28">OPTIONAL RUNNER</text></g>
+                <rect x="20" y="40" width="400" height="208"/>
+                <rect x="500" y="40" width="190" height="208"/>
+                <rect x="770" y="40" width="170" height="208" stroke-dasharray="6 4"/>
+                <g stroke-width="1">
+                  <rect x="36" y="64" width="176" height="44"/><rect x="228" y="64" width="176" height="44"/>
+                  <rect x="36" y="124" width="176" height="44"/><rect x="228" y="124" width="176" height="44"/>
+                  <rect x="36" y="184" width="176" height="44"/><rect x="228" y="184" width="176" height="44"/>
+                  <rect x="516" y="64" width="158" height="56"/><rect x="516" y="136" width="158" height="56"/>
+                  <rect x="786" y="64" width="138" height="56" stroke-dasharray="4 3"/><rect x="786" y="136" width="138" height="56" stroke-dasharray="4 3"/>
+                </g>
+                <g stroke="none" font-size="13">
+                  <text x="48" y="91">Editor + workbench</text><text x="240" y="91">Extension host</text>
+                  <text x="48" y="151">Python (Pyodide)</text><text x="240" y="151">Java + Gradle tools</text>
+                  <text x="48" y="211">Working copy</text><text x="240" y="211">Settings + keys</text>
+                  <text x="528" y="88">GitHub</text><text x="528" y="106" font-size="11" opacity=".7">repos, sign-in</text>
+                  <text x="528" y="160">AI provider</text><text x="528" y="178" font-size="11" opacity=".7">your own key</text>
+                  <text x="798" y="88">Terminal</text><text x="798" y="106" font-size="11" opacity=".7">JDK, Gradle, Node</text>
+                  <text x="798" y="160">Agent CLIs</text><text x="798" y="178" font-size="11" opacity=".7">run in the runner</text>
+                </g>
+                <path d="M420 92H500" marker-end="url(#ah)"/>
+                <path d="M420 164H500" marker-end="url(#ah)"/>
+                <path d="M216 248V284H855V248" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+                <g stroke-width="1" style="fill:var(--paper)"><circle cx="460" cy="74" r="10"/><circle cx="460" cy="146" r="10"/><circle cx="540" cy="284" r="10"/></g>
+                <g stroke="none" font-size="12" text-anchor="middle"><text x="460" y="78">1</text><text x="460" y="150">2</text><text x="540" y="288">3</text></g>
+              </svg>
+            </div>
+            <ol>
+              <li><strong>Sync.</strong> Your working copy is committed to GitHub as one atomic commit.</li>
+              <li><strong>Chat.</strong> The code you select goes to your AI provider, using your own key. Nothing is sent unless you ask.</li>
+              <li><strong>Terminal.</strong> An optional remote runner gives you a real shell, a JDK, Gradle and Node. The IDE works without it.</li>
+            </ol>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>Launch modes</p>
+          <div class="body">
+            <dl class="rows">
+              <div><dt>New tab</dt><dd>The default. Pin the tab and it behaves like an app.</dd></div>
+              <div><dt>Popup window</dt><dd>A compact window with no tab strip. Good for a second monitor.</dd></div>
+              <div><dt>about:blank window</dt><dd>Opens a blank window and hosts the IDE inside it; the address bar stays on <code>about:blank</code>.</dd></div>
+              <div><dt>Installed app</dt><dd>Use your browser's install button. The IDE gets its own window and icon.</dd></div>
+            </dl>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>05</b>Mission</p>
+          <div class="body prose">
+            <h2>Professional tools, available everywhere</h2>
+            <p>Good developer tools should not depend on the computer you happen to be sitting at. We keep your files in your browser, ship no telemetry, and say plainly what a browser tab cannot do.</p>
+            <p><a class="btn" href="/mission/">Read the mission</a></p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>06</b>Limits</p>
+          <div class="body">
+            <ul>
+              <li>A browser tab cannot run a JVM or a native toolchain. Compiling and running Java and Gradle needs the <a href="/runner/">remote runner</a>.</li>
+              <li>Python runs the standard library. Packages with native code are not available.</li>
+              <li>Only extensions that can run in a browser are offered.</li>
+              <li>Browsers cannot guarantee background work while a tab closes. See <a href="/github/">how sync copes with that</a>.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
   </body>
 </html>

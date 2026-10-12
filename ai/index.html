@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>AI assistant - {{name}}</title>
+    <meta name="description" content="A chat panel, inline edits, completions and agent mode that run on your own model key." />
+    <meta property="og:title" content="AI assistant - {{name}}" />
+    <meta property="og:description" content="A chat panel, inline edits, completions and agent mode that run on your own model key." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">AI assistant</p>
+          <h1>An assistant that uses your model and your key.</h1>
+          <p class="dek">A chat panel, an agent mode and optional inline suggestions. We do not resell models, and nothing is sent until you ask. Status: {{status:ai}}</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>What it does</p>
+          <div class="body">
+            <ul>
+              <li><strong>Chat</strong> in a side panel. It sees the open file or your selection, if you leave that box ticked.</li>
+              <li><strong>Agent mode</strong> that can list, find and read files in the workspace and write files. Every write waits for your approval.</li>
+              <li><strong>Explain</strong> and <strong>Fix</strong> commands in the editor context menu for the selected code.</li>
+              <li><strong>Inline suggestions</strong> shown as ghost text. Off by default; switch on <code>luma.ai.inlineCompletions</code>.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Bring your own model</p>
+          <div class="body">
+            <table class="table">
+              <thead><tr><th>Provider</th><th>How it signs in</th></tr></thead>
+              <tbody>
+                <tr><td>Anthropic</td><td>Your API key, stored in your browser.</td></tr>
+                <tr><td>OpenAI-compatible endpoints</td><td>Your API key and base URL (<code>luma.ai.baseUrl</code>). The endpoint must allow browser requests. GitHub Models can be used this way with a token you create for it.</td></tr>
+              </tbody>
+            </table>
+            <p>Requests go from your browser directly to the provider you choose. We do not proxy them and we cannot see them.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>What it is not</p>
+          <div class="body">
+            <p class="note">This is not GitHub Copilot, and it does not use a Copilot subscription. GitHub offers no public way for a third-party app to call Copilot with a user's login, and we do not work around that.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>What leaves your browser</p>
+          <div class="body">
+            <ul>
+              <li>The text of your prompt, and the code you select or attach, go to the provider you chose.</li>
+              <li>Your API key goes to that provider and nowhere else.</li>
+              <li>Inline suggestions send the code around your cursor, only when they are switched on.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

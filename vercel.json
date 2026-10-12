@@ -49,10 +49,6 @@
     {
       "source": "/gallery/resources/:publisher/:name/:version/extension",
       "destination": "/gallery/empty-listing.json"
-    },
-    {
-      "source": "/((?!api/|assets/|extensions/|gallery/|.*\\..*).*)",
-      "destination": "/index.html"
     }
   ]
 }

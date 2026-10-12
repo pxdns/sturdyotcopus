@@ -16,7 +16,6 @@
  */
 
 :root {
-  color-scheme: dark;
   --glass-blur: blur(20px) saturate(140%);
   --glass-radius: 12px;
 
@@ -34,7 +33,6 @@
 
 @media (prefers-color-scheme: light) {
   :root:not([data-theme-kind]) {
-    color-scheme: light;
     --glass-base-1: #f0f4ff;
     --glass-base-2: #fbf0fb;
     --glass-base-3: #eaf6fd;
@@ -48,12 +46,7 @@
   }
 }
 
-:root[data-theme-kind='dark'] {
-  color-scheme: dark;
-}
-
 :root[data-theme-kind='light'] {
-  color-scheme: light;
   --glass-base-1: #f0f4ff;
   --glass-base-2: #fbf0fb;
   --glass-base-3: #eaf6fd;
@@ -72,10 +65,20 @@ html,
 body {
   margin: 0;
   height: 100%;
+  background-color: #1c1c1a;
+}
+@media (prefers-color-scheme: light) {
+  html:not([data-theme-kind='dark']),
+  html:not([data-theme-kind='dark']) body {
+    background-color: #efeeea;
+  }
+}
+html[data-ui='glass'],
+html[data-ui='glass'] body {
   background-color: var(--glass-base-1);
 }
 
-body {
+html[data-ui='glass'] body {
   position: relative;
   overflow: hidden;
   background-image: linear-gradient(135deg, var(--glass-base-1), var(--glass-base-2) 50%, var(--glass-base-3));
@@ -85,7 +88,7 @@ body {
 }
 
 /* Soft colour blobs that drift behind the UI; they are what the blur visibly frosts. */
-body::before {
+html[data-ui='glass'] body::before {
   content: '';
   position: fixed;
   inset: -20%;
@@ -98,7 +101,7 @@ body::before {
   animation: glass-blobs 60s ease-in-out infinite alternate;
 }
 
-#app {
+html[data-ui='glass'] #app {
   position: relative;
   z-index: 1;
   width: 100%;
@@ -118,7 +121,7 @@ body::before {
 
 @media (prefers-reduced-motion: reduce) {
   body,
-  body::before {
+  html[data-ui='glass'] body::before {
     animation: none;
   }
 }
@@ -126,7 +129,7 @@ body::before {
 /* ---------- Let the gradient through ---------- */
 
 /* The workbench root paints an opaque colour; the parts paint their own (translucent) theme colours. */
-.monaco-workbench {
+html[data-ui='glass'] .monaco-workbench {
   background-color: transparent !important;
 }
 
@@ -135,66 +138,66 @@ body::before {
  * .editor-container, .monaco-editor, .monaco-editor-background). With a translucent theme colour
  * they would stack up to ~97% opacity, so only .content keeps the tint.
  */
-.monaco-workbench .part.editor .editor-container,
-.monaco-workbench .part.editor .editor-instance,
-.monaco-workbench .monaco-editor,
-.monaco-workbench .monaco-editor .monaco-editor-background,
-.monaco-workbench .monaco-editor .margin,
-.monaco-workbench .monaco-editor .inputarea.ime-input {
+html[data-ui='glass'] .monaco-workbench .part.editor .editor-container,
+html[data-ui='glass'] .monaco-workbench .part.editor .editor-instance,
+html[data-ui='glass'] .monaco-workbench .monaco-editor,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .monaco-editor-background,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .margin,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .inputarea.ime-input {
   background-color: transparent !important;
 }
 
 /* Same for the title rows inside sidebar / panel, which would double-paint the part colour. */
-.monaco-workbench .part.sidebar > .composite.title,
-.monaco-workbench .part.auxiliarybar > .composite.title,
-.monaco-workbench .part.panel > .composite.title,
-.monaco-workbench .part.sidebar > .title,
-.monaco-workbench .part.panel > .title {
+html[data-ui='glass'] .monaco-workbench .part.sidebar > .composite.title,
+html[data-ui='glass'] .monaco-workbench .part.auxiliarybar > .composite.title,
+html[data-ui='glass'] .monaco-workbench .part.panel > .composite.title,
+html[data-ui='glass'] .monaco-workbench .part.sidebar > .title,
+html[data-ui='glass'] .monaco-workbench .part.panel > .title {
   background-color: transparent !important;
 }
 
 /* VS Code flattens the custom title bar onto an opaque colour; restore the theme's translucent one. */
-.monaco-workbench .part.titlebar {
+html[data-ui='glass'] .monaco-workbench .part.titlebar {
   background-color: var(--vscode-titleBar-activeBackground) !important;
 }
-.monaco-workbench.inactive .part.titlebar,
-.monaco-workbench .part.titlebar.inactive {
+html[data-ui='glass'] .monaco-workbench.inactive .part.titlebar,
+html[data-ui='glass'] .monaco-workbench .part.titlebar.inactive {
   background-color: var(--vscode-titleBar-inactiveBackground) !important;
 }
 
 /* ---------- Blur on the major surfaces ---------- */
 /* Only leaf surfaces get a filter: a backdrop-filter element becomes the backdrop root for its children. */
 
-.monaco-workbench .part.titlebar,
-.monaco-workbench .part.activitybar,
-.monaco-workbench .part.sidebar,
-.monaco-workbench .part.auxiliarybar,
-.monaco-workbench .part.panel,
-.monaco-workbench .part.statusbar,
-.monaco-workbench .part.banner,
-.monaco-workbench .part.editor .editor-group-container > .title,
-.monaco-workbench .part.editor .tabs-container {
+html[data-ui='glass'] .monaco-workbench .part.titlebar,
+html[data-ui='glass'] .monaco-workbench .part.activitybar,
+html[data-ui='glass'] .monaco-workbench .part.sidebar,
+html[data-ui='glass'] .monaco-workbench .part.auxiliarybar,
+html[data-ui='glass'] .monaco-workbench .part.panel,
+html[data-ui='glass'] .monaco-workbench .part.statusbar,
+html[data-ui='glass'] .monaco-workbench .part.banner,
+html[data-ui='glass'] .monaco-workbench .part.editor .editor-group-container > .title,
+html[data-ui='glass'] .monaco-workbench .part.editor .tabs-container {
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
 }
 
 /* ---------- Widgets and popups ---------- */
 
-.monaco-workbench .quick-input-widget,
-.monaco-workbench .monaco-menu,
-.monaco-workbench .context-view .monaco-menu,
-.monaco-workbench .monaco-hover,
-.monaco-workbench .monaco-editor .suggest-widget,
-.monaco-workbench .monaco-editor .parameter-hints-widget,
-.monaco-workbench .monaco-editor .find-widget,
-.monaco-workbench .monaco-editor .monaco-editor-hover,
-.monaco-workbench .monaco-editor .rename-box,
-.monaco-workbench .monaco-editor .peekview-widget .head,
-.monaco-workbench .notifications-toasts .notification-toast,
-.monaco-workbench .notifications-center,
-.monaco-workbench .monaco-dialog-box,
-.monaco-workbench .monaco-select-box-dropdown-container,
-.monaco-workbench .editor-widget {
+html[data-ui='glass'] .monaco-workbench .quick-input-widget,
+html[data-ui='glass'] .monaco-workbench .monaco-menu,
+html[data-ui='glass'] .monaco-workbench .context-view .monaco-menu,
+html[data-ui='glass'] .monaco-workbench .monaco-hover,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .suggest-widget,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .parameter-hints-widget,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .find-widget,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .monaco-editor-hover,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .rename-box,
+html[data-ui='glass'] .monaco-workbench .monaco-editor .peekview-widget .head,
+html[data-ui='glass'] .monaco-workbench .notifications-toasts .notification-toast,
+html[data-ui='glass'] .monaco-workbench .notifications-center,
+html[data-ui='glass'] .monaco-workbench .monaco-dialog-box,
+html[data-ui='glass'] .monaco-workbench .monaco-select-box-dropdown-container,
+html[data-ui='glass'] .monaco-workbench .editor-widget {
   -webkit-backdrop-filter: var(--glass-blur);
   backdrop-filter: var(--glass-blur);
   border-radius: var(--glass-radius);
@@ -204,17 +207,17 @@ body::before {
     var(--glass-widget-shadow);
 }
 
-.monaco-workbench .monaco-editor .suggest-widget,
-.monaco-workbench .monaco-hover,
-.monaco-workbench .monaco-menu {
+html[data-ui='glass'] .monaco-workbench .monaco-editor .suggest-widget,
+html[data-ui='glass'] .monaco-workbench .monaco-hover,
+html[data-ui='glass'] .monaco-workbench .monaco-menu {
   overflow: hidden;
 }
 
-.monaco-workbench .quick-input-widget {
+html[data-ui='glass'] .monaco-workbench .quick-input-widget {
   overflow: hidden;
 }
 
-.monaco-workbench .quick-input-widget .quick-input-title {
+html[data-ui='glass'] .monaco-workbench .quick-input-widget .quick-input-title {
   border-top-left-radius: var(--glass-radius);
   border-top-right-radius: var(--glass-radius);
 }
@@ -222,38 +225,38 @@ body::before {
 /* ---------- Fallback when backdrop-filter is unavailable ---------- */
 
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .monaco-workbench .part.titlebar,
-  .monaco-workbench .part.activitybar,
-  .monaco-workbench .part.sidebar,
-  .monaco-workbench .part.auxiliarybar,
-  .monaco-workbench .part.panel,
-  .monaco-workbench .part.banner,
-  .monaco-workbench .part.editor .editor-group-container > .title,
-  .monaco-workbench .part.editor .tabs-container {
+  html[data-ui='glass'] .monaco-workbench .part.titlebar,
+  html[data-ui='glass'] .monaco-workbench .part.activitybar,
+  html[data-ui='glass'] .monaco-workbench .part.sidebar,
+  html[data-ui='glass'] .monaco-workbench .part.auxiliarybar,
+  html[data-ui='glass'] .monaco-workbench .part.panel,
+  html[data-ui='glass'] .monaco-workbench .part.banner,
+  html[data-ui='glass'] .monaco-workbench .part.editor .editor-group-container > .title,
+  html[data-ui='glass'] .monaco-workbench .part.editor .tabs-container {
     background-color: var(--glass-fallback-bar) !important;
   }
 
-  .monaco-workbench .part.editor > .content {
+  html[data-ui='glass'] .monaco-workbench .part.editor > .content {
     background-color: var(--glass-fallback-surface) !important;
   }
 
-  .monaco-workbench .quick-input-widget,
-  .monaco-workbench .monaco-menu,
-  .monaco-workbench .monaco-hover,
-  .monaco-workbench .monaco-editor .suggest-widget,
-  .monaco-workbench .monaco-editor .parameter-hints-widget,
-  .monaco-workbench .monaco-editor .find-widget,
-  .monaco-workbench .notifications-toasts .notification-toast,
-  .monaco-workbench .notifications-center,
-  .monaco-workbench .monaco-dialog-box,
-  .monaco-workbench .editor-widget {
+  html[data-ui='glass'] .monaco-workbench .quick-input-widget,
+  html[data-ui='glass'] .monaco-workbench .monaco-menu,
+  html[data-ui='glass'] .monaco-workbench .monaco-hover,
+  html[data-ui='glass'] .monaco-workbench .monaco-editor .suggest-widget,
+  html[data-ui='glass'] .monaco-workbench .monaco-editor .parameter-hints-widget,
+  html[data-ui='glass'] .monaco-workbench .monaco-editor .find-widget,
+  html[data-ui='glass'] .monaco-workbench .notifications-toasts .notification-toast,
+  html[data-ui='glass'] .monaco-workbench .notifications-center,
+  html[data-ui='glass'] .monaco-workbench .monaco-dialog-box,
+  html[data-ui='glass'] .monaco-workbench .editor-widget {
     background-color: var(--glass-fallback-bar) !important;
   }
 }
 
 /* ---------- High contrast themes: no glass ---------- */
 
-:root[data-theme-kind='hc'] body::before {
+:root[data-theme-kind='hc'] html[data-ui='glass'] body::before {
   display: none;
 }
 

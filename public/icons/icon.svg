@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <symbol id="mark" viewBox="0 0 48 48">
+      <rect x=".5" y=".5" width="47" height="47" fill="#1c1c1a" stroke="#8b8a84"/>
+      <rect x="10" y="10" width="8" height="8" fill="#6e6d68"/>
+      <rect x="10" y="20" width="8" height="8" fill="#8b8a84"/>
+      <rect x="10" y="30" width="8" height="8" fill="#a9a8a2"/>
+      <rect x="20" y="30" width="8" height="8" fill="#c8c7c1"/>
+      <rect x="30" y="30" width="8" height="8" fill="#e6e5e1"/>
+    </symbol>
+  </defs>
+  <use href="#mark" width="48" height="48"/>
+</svg>

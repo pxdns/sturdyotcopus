@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Remote runner - {{name}}</title>
+    <meta name="description" content="An optional remote runner for terminals, Java and Gradle builds, and agent CLIs." />
+    <meta property="og:title" content="Remote runner - {{name}}" />
+    <meta property="og:description" content="An optional remote runner for terminals, Java and Gradle builds, and agent CLIs." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Remote runner</p>
+          <h1>A real terminal, when you need one.</h1>
+          <p class="dek">Some work needs a JVM, Gradle, Node or a shell. A remote runner provides them, and the IDE connects to it. You host it. Status: {{status:runner}}</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>What it adds</p>
+          <div class="body">
+            <ul>
+              <li>An integrated terminal with a real shell.</li>
+              <li>A JDK, Gradle, Node, Python and git, so Java and Gradle projects can build and run.</li>
+              <li>Agent command-line tools such as Claude Code or Copilot CLI, which you sign in to yourself, inside the runner.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>How it works</p>
+          <div class="body">
+            <p>The runner is a small server. When you open a terminal, the IDE connects over a WebSocket and presents your GitHub identity. The server checks it against an allow-list, starts an isolated container for you, and relays a terminal to your browser.</p>
+            <ul>
+              <li>Closed by default: it will not start without an allow-list of users or an organization, and an allowed web origin.</li>
+              <li>One container per session, with memory, CPU and process limits, all capabilities dropped, and a per-user volume.</li>
+              <li>Your files move between the IDE and the runner through git.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Set it up</p>
+          <div class="body">
+            <ol>
+              <li>On a Linux host with Docker, build the image from <code>runner/image</code>.</li>
+              <li>Start <code>runner/server.mjs</code> with <code>RUNNER_ALLOWED_USERS</code> (or <code>RUNNER_ALLOWED_ORG</code>) and <code>RUNNER_ALLOWED_ORIGINS</code> set.</li>
+              <li>Put TLS in front of it.</li>
+              <li>In the IDE run <em>Remote Runner: Set Server URL</em>, then <em>Remote Runner: Open Terminal</em>.</li>
+            </ol>
+            <p>The full guide, with every setting, is in <code>runner/README.md</code> in the source.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>Be careful</p>
+          <div class="body">
+            <p class="note">A runner gives people a shell. Containers can reach the internet unless you firewall them, and Docker is not a virtual machine. Read the security section before you let anyone you do not trust use it.</p>
+            <p>The server and the IDE client are tested end to end in local mode. The container image has not been tested in automated builds yet.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "luma-runner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Remote runner for Luma IDE: a WebSocket terminal server that starts an isolated shell per signed-in GitHub user.",
+  "scripts": { "start": "node server.mjs", "test": "node test/smoke.mjs" },
+  "engines": { "node": ">=20" },
+  "dependencies": { "@lydell/node-pty": "1.1.0", "ws": "8.18.3" }
+}

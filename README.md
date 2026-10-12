@@ -1,14 +1,31 @@
-# Web VS Code
+# Luma IDE
 
-A browser-based VS Code (think vscode.dev) built as a static Vite + TypeScript site on top of
-[`@codingame/monaco-vscode-api`](https://github.com/CodinGame/monaco-vscode-api). It runs the full VS Code
-workbench (explorer, tabs, command palette, settings, extensions view, search, problems/output panels) entirely
-in the browser. No server, no analytics, no telemetry, no third-party scripts.
+A desktop-class code editor that runs in a browser tab: the full VS Code workbench
+([`@codingame/monaco-vscode-api`](https://github.com/CodinGame/monaco-vscode-api)) plus Python that runs in the page, Java and
+Gradle tooling, GitHub sign-in with automatic commits, an AI assistant that uses your own key, a self-hosted extension
+marketplace and an optional remote runner for real terminals. No ads, no analytics, no telemetry, no third-party scripts.
 
-* **Themes** – a local **Glass Dark / Glass Light** theme plus themes downloaded from [Open VSX](https://open-vsx.org) at build time.
-* **Extensions** – the Extensions view is backed by **our own gallery API** (`/api/gallery`), serving a curated mirror of **web-compatible** [Open VSX](https://open-vsx.org) extensions. Extensions that can't run in a browser are filtered out at build time.
-* **Files** – an in-browser virtual file system (a small sample workspace) persisted in **IndexedDB**.
-* **Languages** – JS/TS, JSON, CSS, HTML, Markdown, C# grammars, with the TS/CSS/HTML/JSON language features running in web workers.
+* **Site** – the promotional pages are static HTML in the repo root (`index.html`, `features/`, `python/`, `java-gradle/`, `github/`, `ai/`, `extensions/`, `runner/`, `privacy/`, `get-started/`, `mission/`, `about/`, `roadmap/`). Shared header/footer live in `site/partials/`, status badges in `site.config.json`.
+* **IDE** – served at `/app/` (new tab, popup window, an `about:blank` host window, or install as a PWA from the site).
+* **Themes** – *Luma Charcoal* and *Luma Paper* (flat, charcoal and light grey) follow the OS light/dark setting; *Glass Dark/Light* are optional.
+* **Python** – Pyodide, self-hosted, in a worker: run files, `input()`, stop, a REPL terminal, live syntax errors, outline, completion and hover.
+* **Java and Gradle** – parser-based syntax errors, outline, snippets and completion for Java; outline, snippets and inspections for `build.gradle`; *Gradle: Run Task* runs in the remote runner. A browser tab cannot compile or run Java.
+* **GitHub** – OAuth sign-in (no personal access tokens), *GitHub: Open Repository*, the last repository and open files restored on the next visit, edits committed to the branch as one atomic commit a few seconds after you stop typing and again when the tab is hidden or closing. Conflicts go to a side branch; nothing is overwritten.
+* **AI assistant** – chat and agent mode (list/find/read files, write files with your approval) in a side panel. Providers: Anthropic and any OpenAI-compatible endpoint, called straight from the browser with your own key (kept in `localStorage`). Inline suggestions are off by default. It is not GitHub Copilot and does not use a Copilot subscription.
+* **Extensions** – the Extensions view is backed by our own gallery API serving a curated mirror of web-compatible Open VSX extensions.
+* **Remote runner** – `runner/`: a small Node server (WebSocket + pty) that gives the IDE a real shell, a JDK, Gradle and Node. Closed by default; see `runner/README.md`.
+
+## Environment variables (Vercel)
+
+| Name | Required | Purpose |
+| --- | --- | --- |
+| `GITHUB_CLIENT_ID` | for GitHub sign-in | Client ID of your GitHub OAuth App |
+| `GITHUB_CLIENT_SECRET` | for GitHub sign-in | Client secret. **Only ever set it here, never commit it.** |
+| `GITHUB_ALLOWED_ORG` | optional | Only members of this organization can sign in |
+
+The OAuth App's authorization callback URL is `https://<your-domain>/api/auth/github/callback`. Access tokens go straight to the
+browser and are never stored on the server. If a client secret was ever pasted into a chat, an issue or a commit, regenerate it in
+the OAuth App settings.
 
 ## Deploy to Vercel
 
@@ -22,13 +39,13 @@ in **Project → Settings** if the build doesn't pick them up:
 | Output Directory | `dist` |
 | Install Command | `npm install` (default) |
 | Node.js Version | **22.x** (anything ≥ 20.19 works; Vite 8 needs it) |
-| Environment Variables | none required |
+| Environment Variables | see above (optional; the IDE works without them) |
 | Root Directory | repository root |
 
 `vercel.json` also sets `Cross-Origin-Opener-Policy: same-origin`, `Cross-Origin-Embedder-Policy: credentialless`
 and `Cross-Origin-Resource-Policy: cross-origin` on every response (needed for `SharedArrayBuffer`, used by the
 language-feature workers), long-lived caching for `/assets/*`,
-and an SPA rewrite to `/index.html`.
+and the rewrites for the gallery API. There is no SPA fallback: each site page is its own HTML file.
 
 The build needs outbound internet access to `open-vsx.org` (Vercel builds have it). If Open VSX is unreachable
 the build still succeeds; the failed extensions are logged and skipped, and the Extensions view is simply empty.
@@ -137,11 +154,15 @@ npm run catalog    # rebuild only the extension catalog (node scripts/build-cata
 npm run typecheck
 ```
 
+## Tests used during development
+
+The GitHub workspace, runner, Python and AI features were exercised with Playwright against local mock servers (a mock GitHub API with a small in-memory git, a scripted model stream, a local runner). Nothing was run against the real GitHub or provider APIs from the build sandbox, so do a real sign-in and a real commit after deploying.
+
 ## Notes
 
 * Package versions of all `@codingame/monaco-vscode-*` packages are pinned to the same exact version (`37.3.11`),
   as the packages must match each other. `monaco-editor` and `vscode` are npm aliases to
   `@codingame/monaco-vscode-editor-api` and `@codingame/monaco-vscode-extension-api`, as in the official demo.
-* The terminal is not included (there is no backend to run a shell).
+* The built-in terminals are the Python REPL (in the page) and the remote runner (needs a server you run).
 * Telemetry is off (`telemetry.telemetryLevel: "off"`, no telemetry service). At runtime the app only talks to
   your own origin (including the extension gallery API); `open-vsx.org` is contacted only by the build.

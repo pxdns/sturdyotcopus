@@ -1,16 +1,38 @@
 {
   "name": "glass-theme",
-  "displayName": "Glass Theme",
-  "description": "Translucent glass UI with Visual Studio C# 2017 / Dark+ / Light+ syntax colors.",
+  "displayName": "Luma and Glass Themes",
+  "description": "Luma Charcoal and Luma Paper (flat, monochrome) plus the translucent Glass Dark and Glass Light themes.",
   "version": "1.0.0",
   "publisher": "local",
   "license": "MIT",
-  "engines": { "vscode": "^1.80.0" },
-  "categories": ["Themes"],
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
   "contributes": {
     "themes": [
-      { "label": "Glass Dark", "uiTheme": "vs-dark", "path": "./themes/glass-dark.json" },
-      { "label": "Glass Light", "uiTheme": "vs", "path": "./themes/glass-light.json" }
+      {
+        "label": "Luma Charcoal",
+        "uiTheme": "vs-dark",
+        "path": "./themes/luma-charcoal.json"
+      },
+      {
+        "label": "Luma Paper",
+        "uiTheme": "vs",
+        "path": "./themes/luma-paper.json"
+      },
+      {
+        "label": "Glass Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/glass-dark.json"
+      },
+      {
+        "label": "Glass Light",
+        "uiTheme": "vs",
+        "path": "./themes/glass-light.json"
+      }
     ]
   }
 }

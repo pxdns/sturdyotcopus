@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Features - {{name}}</title>
+    <meta name="description" content="What {{name}} does today, what it does not, and how it compares with a desktop IDE." />
+    <meta property="og:title" content="Features - {{name}}" />
+    <meta property="og:description" content="What {{name}} does today, what it does not, and how it compares with a desktop IDE." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Features</p>
+          <h1>Everything the IDE does today, and what it does not.</h1>
+          <p class="dek">Each capability has a status: live, building, or planned. Nothing is listed as live until it has been tested in a real browser.</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Index</p>
+          <div class="body">
+            <div class="table-scroll"><table class="table">
+              <thead><tr><th>Capability</th><th>Summary</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Workbench</td><td>Explorer, tabs, split editors, command palette, settings UI, keybinding editor, search, Problems and Output panels.</td><td>{{status:workbench}}</td></tr>
+                <tr><td>Themes</td><td>Glass Dark and Glass Light, plus any theme from the marketplace.</td><td>{{status:themes}}</td></tr>
+                <tr><td><a href="/extensions/">Extensions</a></td><td>Self-hosted catalog of web-compatible extensions.</td><td>{{status:marketplace}}</td></tr>
+                <tr><td><a href="/python/">Python</a></td><td>Interpreter in the page, diagnostics, outline, completion.</td><td>{{status:python}}</td></tr>
+                <tr><td><a href="/java-gradle/">Java</a></td><td>Syntax diagnostics, structure, snippets.</td><td>{{status:java}}</td></tr>
+                <tr><td><a href="/java-gradle/">Gradle</a></td><td>Projects view, completion, inspections.</td><td>{{status:gradle}}</td></tr>
+                <tr><td><a href="/github/">GitHub</a></td><td>Sign in, open repositories, automatic sync.</td><td>{{status:github}}</td></tr>
+                <tr><td><a href="/ai/">AI assistant</a></td><td>Chat, agent mode, optional inline suggestions.</td><td>{{status:ai}}</td></tr>
+                <tr><td><a href="/runner/">Remote runner</a></td><td>Terminal, JDK, Gradle, Node, agent CLIs.</td><td>{{status:runner}}</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Browser or desktop</p>
+          <div class="body">
+            <p>A browser tab and a desktop install make different trade-offs. This table is meant to help you choose, not to sell you the tab.</p>
+            <div class="table-scroll"><table class="table">
+              <thead><tr><th></th><th>In a browser tab</th><th>Desktop IDE</th></tr></thead>
+              <tbody>
+                <tr><td>Install</td><td>None. Works on any modern browser.</td><td>Required, often needs admin rights.</td></tr>
+                <tr><td>Native toolchains</td><td>No. Needs the remote runner.</td><td>Yes.</td></tr>
+                <tr><td>Extensions</td><td>Only those that run on the web.</td><td>Nearly all.</td></tr>
+                <tr><td>Offline</td><td>Your files are local; the app itself needs a connection to load.</td><td>Fully offline.</td></tr>
+                <tr><td>Moving between machines</td><td>Sign in with GitHub and continue.</td><td>Set up each machine.</td></tr>
+                <tr><td>Performance</td><td>Good for editing; heavy builds are slower.</td><td>Native speed.</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Editor essentials</p>
+          <div class="body">
+            <ul>
+              <li>Command palette: <kbd>F1</kbd> or <kbd>Ctrl/Cmd</kbd> <kbd>Shift</kbd> <kbd>P</kbd></li>
+              <li>Split editors, diff editor, breadcrumbs, minimap, sticky scroll, bracket matching</li>
+              <li>Workspace-wide search and replace with regular expressions</li>
+              <li>Timeline and local history for recovering earlier versions of a file</li>
+              <li>JavaScript, TypeScript, JSON, CSS, HTML and Markdown language features running in web workers</li>
+              <li>An IntelliJ IDEA keymap, installable from the marketplace</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

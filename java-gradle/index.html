@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Java and Gradle - {{name}}</title>
+    <meta name="description" content="Java and Gradle tooling that works in a browser: diagnostics, structure, completion. What needs a server." />
+    <meta property="og:title" content="Java and Gradle - {{name}}" />
+    <meta property="og:description" content="Java and Gradle tooling that works in a browser: diagnostics, structure, completion. What needs a server." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Java and Gradle</p>
+          <h1>Understanding Java and Gradle, within what a browser can do.</h1>
+          <p class="dek">A browser tab has no JVM. These tools read your code; they do not compile or run it. Java: {{status:java}} &nbsp; Gradle: {{status:gradle}}</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Java</p>
+          <div class="body">
+            <ul>
+              <li><strong>Syntax diagnostics</strong> from a real Java parser, with error positions in the editor and Problems panel.</li>
+              <li><strong>Structure.</strong> Classes, interfaces, enums, records, methods and fields in the Outline.</li>
+              <li><strong>Snippets and completion</strong> for keywords, common JDK types and names in the file.</li>
+            </ul>
+            <p class="note">There is no type resolution, no cross-file refactoring and no compiler errors. Those need a JDK and a language server, which belong in the <a href="/runner/">remote runner</a>.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Gradle</p>
+          <div class="body">
+            <ul>
+              <li><strong>Outline</strong> of the plugins, dependencies, tasks and subprojects found in <code>build.gradle</code>, <code>build.gradle.kts</code> and <code>settings.gradle</code>, plus <em>Gradle: Show Build Files</em> to jump between them.</li>
+              <li><strong>Snippets</strong> for plugins, repositories, dependencies, application and test blocks.</li>
+              <li><strong>Inspections</strong> for deprecated configurations such as <code>compile</code> and <code>testCompile</code>, and for unbalanced braces.</li>
+              <li><strong>Highlighting</strong> for Groovy build scripts, and <em>Gradle: Run Task</em>, which runs the task in the remote runner.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Keymap</p>
+          <div class="body">
+            <p>An IntelliJ IDEA keymap is included in the catalog, so familiar shortcuts work. It changes shortcuts only; it does not add IDE features.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>Not in a browser</p>
+          <div class="body">
+            <ul>
+              <li>Compiling, running, testing and debugging Java.</li>
+              <li>Running Gradle tasks and resolving dependencies.</li>
+              <li>Kotlin DSL (<code>.gradle.kts</code>) gets no dedicated grammar yet.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

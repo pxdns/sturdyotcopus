@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Roadmap - {{name}}</title>
+    <meta name="description" content="What is finished, in progress and planned for {{name}}." />
+    <meta property="og:title" content="Roadmap - {{name}}" />
+    <meta property="og:description" content="What is finished, in progress and planned for {{name}}." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Roadmap</p>
+          <h1>What is finished, what is being built, what is not started.</h1>
+          <p class="dek">Statuses come from one file and are updated when a feature has been tested in a real browser.</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Status</p>
+          <div class="body">
+            <div class="table-scroll"><table class="table">
+              <thead><tr><th>Item</th><th>Status</th></tr></thead>
+              <tbody>
+                <tr><td>Workbench, themes, launch modes</td><td>{{status:workbench}}</td></tr>
+                <tr><td>Extension catalog</td><td>{{status:marketplace}}</td></tr>
+                <tr><td>GitHub sign-in and sync</td><td>{{status:github}}</td></tr>
+                <tr><td>Python</td><td>{{status:python}}</td></tr>
+                <tr><td>Java tools</td><td>{{status:java}}</td></tr>
+                <tr><td>Gradle tools</td><td>{{status:gradle}}</td></tr>
+                <tr><td>AI assistant</td><td>{{status:ai}}</td></tr>
+                <tr><td>Remote runner</td><td>{{status:runner}}</td></tr>
+              </tbody>
+            </table></div>
+            <p>Live means tested in a real browser. Building means in progress and may be incomplete. Planned means designed but not started.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

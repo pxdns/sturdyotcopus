@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Get started - {{name}}</title>
+    <meta name="description" content="Open the IDE, sign in with GitHub, and learn the essential shortcuts." />
+    <meta property="og:title" content="Get started - {{name}}" />
+    <meta property="og:description" content="Open the IDE, sign in with GitHub, and learn the essential shortcuts." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Get started</p>
+          <h1>Open it, then pick up where you left off.</h1>
+          <p class="dek">No account is needed to start. Sign in with GitHub when you want to open a repository.</p>
+        </header>
+        <div class="wrap-actions">
+            <div class="actions">
+              <a class="btn solid" href="/app/">Open in this tab</a>
+              <a class="btn" href="/app/" data-launch="popup">Popup window</a>
+              <a class="btn" href="/app/" data-launch="blank">about:blank window</a>
+              <button class="btn" type="button" data-install hidden>Install as an app</button>
+            </div>
+        </div>
+        <section class="sec">
+          <p class="label"><b>01</b>First steps</p>
+          <div class="body">
+            <ol>
+              <li>Open the IDE. A sample workspace is created in your browser.</li>
+              <li>To work on GitHub, press <kbd>F1</kbd> and run <em>GitHub: Sign In</em>, then <em>GitHub: Open Repository</em>.</li>
+              <li>Edit. Changes are committed and pushed for you.</li>
+              <li>Open a <code>.py</code> file and use the run button in the editor toolbar.</li>
+              <li>To use the assistant, run <em>AI: Set API Key</em>.</li>
+            </ol>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Shortcuts</p>
+          <div class="body">
+            <dl class="rows">
+              <div><dt>Command palette</dt><dd><kbd>F1</kbd> or <kbd>Ctrl/Cmd</kbd> <kbd>Shift</kbd> <kbd>P</kbd></dd></div>
+              <div><dt>Open a file</dt><dd><kbd>Ctrl/Cmd</kbd> <kbd>P</kbd></dd></div>
+              <div><dt>Search in files</dt><dd><kbd>Ctrl/Cmd</kbd> <kbd>Shift</kbd> <kbd>F</kbd></dd></div>
+              <div><dt>Extensions</dt><dd><kbd>Ctrl/Cmd</kbd> <kbd>Shift</kbd> <kbd>X</kbd></dd></div>
+              <div><dt>Color theme</dt><dd><kbd>Ctrl/Cmd</kbd> <kbd>K</kbd> then <kbd>Ctrl/Cmd</kbd> <kbd>T</kbd></dd></div>
+            </dl>
+            <p class="note">Some shortcuts are claimed by the browser. Installing the IDE as an app, or using the popup window, frees most of them.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Install as an app</p>
+          <div class="body">
+            <p>In Chromium-based browsers use the install icon in the address bar, or the button above when it appears. In Safari, use <em>File, Add to Dock</em>. The app opens in its own window.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

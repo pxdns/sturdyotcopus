@@ -37,6 +37,11 @@ import getSecretStorageServiceOverride from '@codingame/monaco-vscode-secret-sto
 import getAuthenticationServiceOverride from '@codingame/monaco-vscode-authentication-service-override'
 import getEmmetServiceOverride from '@codingame/monaco-vscode-emmet-service-override'
 import getLocalizationServiceOverride from '@codingame/monaco-vscode-localization-service-override'
+import getTerminalServiceOverride from '@codingame/monaco-vscode-terminal-service-override'
+import getTimelineServiceOverride from '@codingame/monaco-vscode-timeline-service-override'
+import getMultiDiffEditorServiceOverride from '@codingame/monaco-vscode-multi-diff-editor-service-override'
+import { ExtensionHostKind, registerExtension } from '@codingame/monaco-vscode-api/extensions'
+import 'vscode/localExtensionHost'
 
 // Default (built-in) language and theme extensions
 import '@codingame/monaco-vscode-theme-defaults-default-extension'
@@ -48,6 +53,13 @@ import '@codingame/monaco-vscode-css-default-extension'
 import '@codingame/monaco-vscode-html-default-extension'
 import '@codingame/monaco-vscode-markdown-basics-default-extension'
 import '@codingame/monaco-vscode-csharp-default-extension'
+import '@codingame/monaco-vscode-python-default-extension'
+import '@codingame/monaco-vscode-java-default-extension'
+import '@codingame/monaco-vscode-groovy-default-extension'
+import '@codingame/monaco-vscode-xml-default-extension'
+import '@codingame/monaco-vscode-yaml-default-extension'
+import '@codingame/monaco-vscode-shellscript-default-extension'
+import '@codingame/monaco-vscode-ini-default-extension'
 import '@codingame/monaco-vscode-configuration-editing-default-extension'
 import '@codingame/monaco-vscode-emmet-default-extension'
 // Language features (run in web workers)
@@ -58,8 +70,12 @@ import '@codingame/monaco-vscode-json-language-features-default-extension'
 import '@codingame/monaco-vscode-markdown-language-features-default-extension'
 
 import { registerBuiltinExtensions } from './extensions'
+import { activateLuma } from './features'
+import { lumaManifest } from './features/manifest'
+import { LumaTerminalBackend } from './terminal/backend'
 import { getHostColorSchemeServiceOverride } from './hostColorScheme'
 import { setupWorkspace, WORKSPACE_ROOT } from './workspace'
+import { installLifecycleHandlers, prepareGithubWorkspace } from './github/workspace'
 
 // Must be named `Worker`: Vite only bundles worker URLs written as `new Worker(new URL(...))`.
 class Worker {
@@ -89,8 +105,14 @@ async function start(): Promise<void> {
   await createIndexedDBProviders()
   await setupWorkspace()
 
+  // Reopen the GitHub repository from last time (its working copy is loaded before the workbench starts).
+  const problems: string[] = []
+  const github = await prepareGithubWorkspace((m) => problems.push(m))
+
   // Open VSX themes + the local Glass theme, registered before the workbench starts.
   await registerBuiltinExtensions()
+  // Built-in Luma features (Python, GitHub, Java/Gradle, AI, runner) run in the main thread through the extension API.
+  const luma = registerExtension(lumaManifest as never, ExtensionHostKind.LocalProcess)
 
   const container = document.getElementById('app')
   if (container == null) throw new Error('#app not found')
@@ -103,9 +125,9 @@ async function start(): Promise<void> {
       async open() {
         return false
       },
-      workspace: { folderUri: WORKSPACE_ROOT }
+      workspace: { folderUri: github?.folderUri ?? WORKSPACE_ROOT }
     },
-    defaultLayout: {
+    defaultLayout: github ? undefined : {
       editors: [
         { uri: WORKSPACE_ROOT.with({ path: '/workspace/README.md' }), viewColumn: 1 },
         { uri: WORKSPACE_ROOT.with({ path: '/workspace/src/Program.cs' }), viewColumn: 2 }
@@ -113,24 +135,32 @@ async function start(): Promise<void> {
       layout: { editors: { orientation: 0, groups: [{ size: 1 }, { size: 1 }] } }
     },
     configurationDefaults: {
-      'workbench.colorTheme': 'Glass Dark',
+      'workbench.colorTheme': 'Luma Charcoal',
       'window.autoDetectColorScheme': true,
-      'workbench.preferredDarkColorTheme': 'Glass Dark',
-      'workbench.preferredLightColorTheme': 'Glass Light',
+      'workbench.preferredDarkColorTheme': 'Luma Charcoal',
+      'workbench.preferredLightColorTheme': 'Luma Paper',
       'editor.semanticHighlighting.enabled': true,
       'editor.fontSize': 14,
       'editor.minimap.enabled': true,
       'files.autoSave': 'afterDelay',
       'telemetry.telemetryLevel': 'off',
+      'terminal.integrated.enablePersistentSessions': false,
+      'terminal.integrated.gpuAcceleration': 'off',
+      'terminal.integrated.defaultProfile.linux': 'Python',
+      'terminal.integrated.defaultProfile.osx': 'Python',
+      'terminal.integrated.defaultProfile.windows': 'Python',
+      'terminal.integrated.profiles.linux': { Python: { path: 'luma-python' }, 'Remote runner': { path: 'luma-runner' } },
+      'terminal.integrated.profiles.osx': { Python: { path: 'luma-python' }, 'Remote runner': { path: 'luma-runner' } },
+      'terminal.integrated.profiles.windows': { Python: { path: 'luma-python' }, 'Remote runner': { path: 'luma-runner' } },
       'extensions.autoUpdate': false,
       'extensions.autoCheckUpdates': false,
       'update.mode': 'none',
       'workbench.startupEditor': 'none',
-      'window.title': 'Web VS Code${separator}${dirty}${activeEditorShort}'
+      'window.title': 'Luma IDE${separator}${dirty}${activeEditorShort}'
     },
     productConfiguration: {
-      nameShort: 'Web VS Code',
-      nameLong: 'Web VS Code',
+      nameShort: 'Luma IDE',
+      nameLong: 'Luma IDE',
       // Extensions come from our own gallery API (api/gallery.js), a curated mirror of web-compatible
       // Open VSX extensions built by scripts/build-catalog.mjs - not the Microsoft Marketplace.
       extensionsGallery: {
@@ -191,6 +221,9 @@ async function start(): Promise<void> {
         async setLocale() {},
         availableLanguages: [{ locale: 'en', languageName: 'English' }]
       }),
+      ...getTerminalServiceOverride(new LumaTerminalBackend()),
+      ...getTimelineServiceOverride(),
+      ...getMultiDiffEditorServiceOverride(),
       ...getHostColorSchemeServiceOverride(),
       ...getWorkbenchServiceOverride(),
       ...getQuickAccessServiceOverride({
@@ -201,6 +234,10 @@ async function start(): Promise<void> {
     container,
     options
   )
+
+  const lumaApi = await luma.getApi()
+  if (github) installLifecycleHandlers(github.checkout, () => lumaApi.commands.executeCommand('workbench.action.files.saveAll'))
+  activateLuma(lumaApi, { checkout: github?.checkout, problems })
 }
 
 /** Mirror the workbench theme kind (vs-dark | vs | hc-*) on <html> so glass.css can switch gradients. */
@@ -209,6 +246,9 @@ function syncThemeKind(): void {
     const cl = el.classList
     const kind = cl.contains('hc-black') || cl.contains('hc-light') ? 'hc' : cl.contains('vs-dark') ? 'dark' : 'light'
     document.documentElement.dataset.themeKind = kind
+    // The translucent "glass" chrome (blur, gradient, rounded widgets) only applies to the Glass themes.
+    const glass = [...cl].some((c) => c.startsWith('local-glass-theme-themes-glass-'))
+    document.documentElement.dataset.ui = glass ? 'glass' : 'flat'
   }
   const attach = (el: Element): void => {
     update(el)

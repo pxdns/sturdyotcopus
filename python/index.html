@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Python - {{name}}</title>
+    <meta name="description" content="Run Python in the browser with a WebAssembly CPython interpreter. What works and what does not." />
+    <meta property="og:title" content="Python - {{name}}" />
+    <meta property="og:description" content="Run Python in the browser with a WebAssembly CPython interpreter. What works and what does not." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Python</p>
+          <h1>Run Python without installing Python.</h1>
+          <p class="dek">Your scripts run in a real CPython interpreter compiled to WebAssembly, inside the page. Status: {{status:python}}</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Runtime</p>
+          <div class="body">
+            <p>The interpreter is Pyodide, a WebAssembly build of CPython. It ships with the IDE and is served from our own origin, so there is no third-party download at runtime.</p>
+            <ul>
+              <li>Run the active file from the editor toolbar. Output appears in the Output panel.</li>
+              <li><code>input()</code> opens a prompt in the editor, so interactive scripts work.</li>
+              <li>A stop button ends a runaway script by terminating its worker.</li>
+              <li>The standard library is available. Packages with native code are not.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Editing</p>
+          <div class="body">
+            <ul>
+              <li><strong>Diagnostics.</strong> Syntax errors are found by Python's own parser and shown as you type.</li>
+              <li><strong>Outline.</strong> Classes, functions and methods appear in the Outline view and breadcrumbs.</li>
+              <li><strong>Completion and hover.</strong> Keywords, built-ins, names defined in the file, and docs for the built-in functions.</li>
+            </ul>
+            <p class="note">This is not a full type-aware language server. It does not resolve imports across files or infer types.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>What does not work</p>
+          <div class="body">
+            <ul>
+              <li>Packages that need native code, and anything that opens sockets.</li>
+              <li>A debugger with breakpoints.</li>
+              <li>Virtual environments. There is one interpreter per tab.</li>
+            </ul>
+            <p>For those, use the <a href="/runner/">remote runner</a> when it is available.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

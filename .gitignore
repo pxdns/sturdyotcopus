@@ -4,3 +4,4 @@ public/extensions
 *.log
 .DS_Store
 public/gallery
+public/pyodide

@@ -12,12 +12,12 @@ const SEEDED_KEY = 'webvscode.workspace.seeded.v1'
 const STORE = 'workspace-files'
 
 const sample: Record<string, string> = {
-  'README.md': `# Welcome to Web VS Code
+  'README.md': `# Welcome to Luma IDE
 
 This is an in-browser workspace. Files are saved to **IndexedDB**, so they survive reloads.
 
 - Open the command palette with \`F1\` or \`Ctrl/Cmd+Shift+P\`
-- Pick a theme with **Preferences: Color Theme** (try *Glass Dark* / *Glass Light*)
+- Pick a theme with **Preferences: Color Theme** (try *Luma Charcoal*, *Luma Paper* or *Glass Dark*)
 - Browse extensions from Open VSX in the Extensions view
 `,
   'src/Program.cs': `using System;
@@ -83,6 +83,68 @@ function fib(n) {
 }
 
 console.log('fib(10) =', fib(10))
+`,
+  'src/hello.py': `# A small Python program. Press the run button in the editor toolbar.
+import math
+
+
+class Greeter:
+    def __init__(self, prefix: str = "Hello") -> None:
+        self.prefix = prefix
+
+    def greet(self, name: str) -> str:
+        return f"{self.prefix}, {name}!"
+
+
+def circle_area(radius: float) -> float:
+    return math.pi * radius ** 2
+
+
+if __name__ == "__main__":
+    name = input("Your name? ")
+    print(Greeter().greet(name))
+    print("Area of a circle with radius 2:", round(circle_area(2), 3))
+`,
+  'java/src/main/java/app/Main.java': `package app;
+
+import java.util.List;
+
+public class Main {
+    record Point(int x, int y) {}
+
+    private final List<String> names = List.of("Ada", "Linus");
+
+    public static void main(String[] args) {
+        System.out.println(new Main().greet("Luma"));
+    }
+
+    String greet(String name) {
+        return "Hello, " + name + "!";
+    }
+}
+`,
+  'java/build.gradle': `plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
+}
+
+application {
+    mainClass = 'app.Main'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+`,
+  'java/settings.gradle': `rootProject.name = 'sample-java'
 `,
   'public/index.html': `<!DOCTYPE html>
 <html lang="en">

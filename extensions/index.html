@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Extensions - {{name}}</title>
+    <meta name="description" content="A self-hosted catalog of extensions that run in a browser, filtered at build time." />
+    <meta property="og:title" content="Extensions - {{name}}" />
+    <meta property="og:description" content="A self-hosted catalog of extensions that run in a browser, filtered at build time." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Extensions</p>
+          <h1>A catalog of extensions that work in a browser.</h1>
+          <p class="dek">The Extensions view lists extensions from the Open VSX registry, filtered at build time to those that can run on the web. Status: {{status:marketplace}}</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>How the catalog is made</p>
+          <div class="body">
+            <ol>
+              <li>The build scans Open VSX by popularity.</li>
+              <li>It keeps extensions that ship browser code or are purely declarative (themes, grammars, snippets, keymaps).</li>
+              <li>It keeps those with an open-source license, and drops very large ones.</li>
+              <li>It reserves room per category so many small useful extensions are not crowded out by a few big ones.</li>
+              <li>Files are served from this site. Installing an extension never contacts Open VSX from your browser.</li>
+            </ol>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Why some extensions are missing</p>
+          <div class="body">
+            <p>Most extensions run Node.js code and need a server-side process. They cannot run in a tab. Others are too large, have no clear license, or depend on something that is not in the catalog.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Trust</p>
+          <div class="body">
+            <p>Each install asks whether you trust the publisher. Extensions run in a web worker with no access to your files except through the editor's own interfaces. Their license files are included with their code.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Mission - {{name}}</title>
+    <meta name="description" content="Why {{name}} exists and the principles it is built on." />
+    <meta property="og:title" content="Mission - {{name}}" />
+    <meta property="og:description" content="Why {{name}} exists and the principles it is built on." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Mission</p>
+          <h1>Professional tools, available everywhere.</h1>
+          <p class="dek">Good developer tools should not depend on the computer you happen to be sitting at.</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Principles</p>
+          <div class="body">
+            <dl class="rows">
+              <div><dt>Open the door</dt><dd>No installer, no licence key, no required account. If you have a modern browser, you have an IDE.</dd></div>
+              <div><dt>Keep it yours</dt><dd>Your files live in your browser. We ship no telemetry. Your keys and tokens stay on your device.</dd></div>
+              <div><dt>Be plain about limits</dt><dd>We say what runs in a browser and what needs a server, and we label what is not finished.</dd></div>
+              <div><dt>Build on open work</dt><dd>The editor, the interpreter, the registry and the type are open source. We contribute what we can back.</dd></div>
+              <div><dt>Make it readable</dt><dd>Interfaces and themes target WCAG AA contrast and work from the keyboard.</dd></div>
+            </dl>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Where we are heading</p>
+          <div class="body prose">
+            <ul>
+              <li>Real language servers running in web workers, starting with the languages people ask for most.</li>
+              <li>A remote runner so builds and terminals work from any browser.</li>
+              <li>Better offline behaviour.</li>
+            </ul>
+            <p>The <a href="/roadmap/">roadmap</a> says what is finished and what is not.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

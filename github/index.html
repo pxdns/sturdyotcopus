@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>GitHub - {{name}}</title>
+    <meta name="description" content="Sign in with GitHub, open any repository, and have your work committed automatically." />
+    <meta property="og:title" content="GitHub - {{name}}" />
+    <meta property="og:description" content="Sign in with GitHub, open any repository, and have your work committed automatically." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">GitHub</p>
+          <h1>Sign in, open a repository, and keep working.</h1>
+          <p class="dek">Your edits are saved locally and committed to GitHub for you, including when you close the tab. Status: {{status:github}}</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Sign-in</p>
+          <div class="body">
+            <p>Sign in uses GitHub's standard OAuth redirect. The site asks for the <code>repo</code> and <code>read:org</code> scopes, so you can open private repositories and organization repositories you can already access.</p>
+            <ul>
+              <li>Your access token goes to your browser and stays there. It is never stored on our server.</li>
+              <li>Site owners can restrict sign-in to members of one organization.</li>
+              <li>Sign out removes the token from the browser.</li>
+            </ul>
+            <p class="note">The <code>repo</code> scope is broad. If your organization uses a GitHub App with per-repository permissions, ask the site owner for that instead.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Workspace</p>
+          <div class="body">
+            <p>Run <em>GitHub: Open Repository</em> and pick a repository and branch. Next time you open the IDE it returns to the same repository and the same open files.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Sync</p>
+          <div class="body">
+            <ol>
+              <li>Edits go to a working copy stored in the browser, so typing never waits on the network.</li>
+              <li>A few seconds after you stop typing, the changes are sent as <strong>one atomic commit</strong> to the branch you opened.</li>
+              <li>When the tab is hidden or closing, one last attempt is made.</li>
+              <li>If anything is still unsynced, the browser asks before the tab can close.</li>
+            </ol>
+            <p>If the branch moved while you were editing and the changes do not overlap, the commit goes on top. If they do overlap, your work is saved on a new side branch and you are told. Nothing is overwritten.</p>
+            <p class="note">Browsers cannot guarantee background work while a tab closes. That is why sync runs continuously instead of only at the end.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>Limits</p>
+          <div class="body">
+            <ul>
+              <li>No merge or rebase tools, and no history browser yet.</li>
+              <li>Very large repositories may not list completely.</li>
+              <li>Commits are made as you; there is no separate bot identity.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

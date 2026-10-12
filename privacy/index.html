@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>Privacy - {{name}}</title>
+    <meta name="description" content="What {{name}} stores in your browser, what it sends, and to whom." />
+    <meta property="og:title" content="Privacy - {{name}}" />
+    <meta property="og:description" content="What {{name}} stores in your browser, what it sends, and to whom." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">Privacy</p>
+          <h1>What stays in your browser and what leaves it.</h1>
+          <p class="dek">Short, specific and checkable in the source.</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Stays on your device</p>
+          <div class="body">
+            <ul>
+              <li>Your files and workspace, in the browser's IndexedDB.</li>
+              <li>Settings, keybindings, and which workspace you opened last.</li>
+              <li>Your GitHub token and any AI API key.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Leaves your browser, only when you use it</p>
+          <div class="body">
+            <table class="table">
+              <thead><tr><th>Destination</th><th>When</th><th>What</th></tr></thead>
+              <tbody>
+                <tr><td>github.com</td><td>When you sign in or open a repository</td><td>Your sign-in, repository reads, and the commits you make.</td></tr>
+                <tr><td>Your AI provider</td><td>When you chat or accept completions</td><td>Your prompt and the code you share.</td></tr>
+                <tr><td>This site</td><td>When you load it</td><td>The app files, and the extension catalog you browse.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>What we do not do</p>
+          <div class="body">
+            <ul>
+              <li>No analytics, advertising, tracking pixels or third-party scripts.</li>
+              <li>Fonts and the Python runtime are served from this site.</li>
+              <li>The only cookie is a short-lived sign-in state cookie during GitHub sign-in.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>Clearing your data</p>
+          <div class="body">
+            <p>Sign out from the status bar to remove your GitHub token. Clearing this site's data in your browser settings removes everything else the IDE stored.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>

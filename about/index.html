@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#1c1c1a" />
+    <title>About - {{name}}</title>
+    <meta name="description" content="About {{name}}: why it exists, what it is built on, and who it is not affiliated with." />
+    <meta property="og:title" content="About - {{name}}" />
+    <meta property="og:description" content="About {{name}}: why it exists, what it is built on, and who it is not affiliated with." />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/site/site.css" />
+    <script type="module" src="/site/site.js"></script>
+  </head>
+  <body>
+    <!--include:header-->
+    <main id="main">
+      <div class="wrap">
+        <header class="pagehead">
+          <p class="folio">About</p>
+          <h1>An IDE for the browser, built in the open.</h1>
+          <p class="dek">{{name}} brings the desktop editor workflow to places where installing software is slow, restricted or impossible.</p>
+        </header>
+        <section class="sec">
+          <p class="label"><b>01</b>Why</p>
+          <div class="body prose">
+            <p>People move between machines all the time: a school lab, a borrowed laptop, a locked-down work PC, a tablet. A full toolchain cannot follow them. A web page can.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>02</b>Built on</p>
+          <div class="body">
+            <div class="table-scroll"><table class="table">
+              <thead><tr><th>Part</th><th>Project</th></tr></thead>
+              <tbody>
+                <tr><td>Editor workbench</td><td>Code - OSS, packaged for the web by monaco-vscode-api</td></tr>
+                <tr><td>Python</td><td>Pyodide (CPython on WebAssembly)</td></tr>
+                <tr><td>Extensions</td><td>The Open VSX registry</td></tr>
+                <tr><td>Java parsing</td><td>java-parser</td></tr>
+                <tr><td>Type</td><td>IBM Plex</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>03</b>Independence</p>
+          <div class="body">
+            <p>{{name}} is an independent project. It is not affiliated with or endorsed by Microsoft, GitHub, JetBrains, Gradle, Oracle or the Python Software Foundation. Their names appear only to describe compatibility.</p>
+          </div>
+        </section>
+        <section class="sec">
+          <p class="label"><b>04</b>Source</p>
+          <div class="body">
+            <p>The source code is at <a href="{{repo}}" rel="noopener">{{repo}}</a>. Issues and pull requests are welcome.</p>
+          </div>
+        </section>
+      </div>
+    </main>
+    <!--include:footer-->
+  </body>
+</html>
