@@ -1,0 +1,16 @@
+{
+  "name": "glass-theme",
+  "displayName": "Glass Theme",
+  "description": "Translucent glass UI with Visual Studio C# 2017 / Dark+ / Light+ syntax colors.",
+  "version": "1.0.0",
+  "publisher": "local",
+  "license": "MIT",
+  "engines": { "vscode": "^1.80.0" },
+  "categories": ["Themes"],
+  "contributes": {
+    "themes": [
+      { "label": "Glass Dark", "uiTheme": "vs-dark", "path": "./themes/glass-dark.json" },
+      { "label": "Glass Light", "uiTheme": "vs", "path": "./themes/glass-light.json" }
+    ]
+  }
+}
