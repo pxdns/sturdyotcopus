@@ -70,6 +70,7 @@ import '@codingame/monaco-vscode-json-language-features-default-extension'
 import '@codingame/monaco-vscode-markdown-language-features-default-extension'
 
 import { registerBuiltinExtensions } from './extensions'
+import { registerUploadedExtensions } from './uploaded-extensions'
 import { activateLuma } from './features'
 import { lumaManifest } from './features/manifest'
 import { LumaTerminalBackend } from './terminal/backend'
@@ -111,6 +112,7 @@ async function start(): Promise<void> {
 
   // Open VSX themes + the local Glass theme, registered before the workbench starts.
   await registerBuiltinExtensions()
+  await registerUploadedExtensions()
   // Built-in Luma features (Python, GitHub, Java/Gradle, AI, runner) run in the main thread through the extension API.
   const luma = registerExtension(lumaManifest as never, ExtensionHostKind.LocalProcess)
 

@@ -1,4 +1,5 @@
 import type * as vscode from 'vscode'
+import { getSession } from '../github/auth'
 import { chatHtml } from '../ai/view'
 import { complete, streamTurn, type Msg, type ProviderConfig, type ToolDef } from '../ai/providers'
 
@@ -23,21 +24,26 @@ You can inspect and change the open workspace with tools. Read the relevant file
 The browser cannot run a JVM or native toolchains. Do not claim to have run or tested code; suggest the commands for the user's terminal instead.` : `
 You cannot see the workspace except for the file and selection the user shares in the message.`}`
 
+/** The stored key for a provider choice; GitHub Models falls back to the GitHub sign-in token. */
+const keyFor = (choice: string): string => getKey(choice) || (choice === 'github-models' ? (getSession()?.token ?? '') : '')
+
 export function activateAi(vs: Vscode): void {
   const cfg = (): vscode.WorkspaceConfiguration => vs.workspace.getConfiguration('luma.ai')
   const provider = (): ProviderConfig => {
-    const p = cfg().get<string>('provider', 'anthropic') === 'openai' ? 'openai' : 'anthropic'
+    const choice = cfg().get<string>('provider', 'github-models')
+    const p = choice === 'anthropic' ? 'anthropic' : 'openai'
+    const gh = choice === 'github-models'
     return {
       provider: p,
-      apiKey: getKey(p),
-      model: cfg().get<string>('model', '').trim() || (p === 'anthropic' ? 'claude-sonnet-5-5' : ''),
-      baseUrl: cfg().get<string>('baseUrl', '').trim() || (p === 'openai' ? 'https://api.openai.com/v1' : '')
+      apiKey: keyFor(choice),
+      model: cfg().get<string>('model', '').trim() || (p === 'anthropic' ? 'claude-sonnet-5-5' : gh ? 'openai/gpt-4.1' : ''),
+      baseUrl: cfg().get<string>('baseUrl', '').trim() || (gh ? 'https://models.github.ai/inference' : p === 'openai' ? 'https://api.openai.com/v1' : '')
     }
   }
   const askKey = async (): Promise<boolean> => {
-    const p = provider().provider
+    const p = cfg().get<string>('provider', 'github-models')
     const v = await vs.window.showInputBox({
-      title: `API key for ${p === 'anthropic' ? 'Anthropic' : 'the OpenAI-compatible endpoint'}`,
+      title: `API key for ${p === 'anthropic' ? 'Anthropic' : p === 'github-models' ? 'GitHub Models (a token with the models:read permission)' : 'the OpenAI-compatible endpoint'}`,
       prompt: 'Stored in this browser only (localStorage). It is sent to the provider you configured and nowhere else. Leave empty to remove it.',
       password: true, ignoreFocusOut: true
     })
@@ -105,8 +111,9 @@ export function activateAi(vs: Vscode): void {
 
   async function handle(text: string, mode: 'chat' | 'agent', withFile: boolean): Promise<void> {
     const c = provider()
+    const choice = cfg().get<string>('provider', 'github-models')
     if (!c.apiKey && !(await askKey())) { post({ type: 'note', text: 'Set an API key to start. Use the Key button, or run "AI: Set API Key".' }); post({ type: 'done' }); return }
-    c.apiKey = getKey(c.provider)
+    c.apiKey = keyFor(choice)
     if (!c.model) { post({ type: 'error', text: 'Set "luma.ai.model" in settings for this provider.' }); post({ type: 'done' }); return }
     post({ type: 'user', text })
     history.push({ role: 'user', text: text + (await context(withFile)) })
@@ -141,7 +148,7 @@ export function activateAi(vs: Vscode): void {
     }
   }
 
-  const empty = `<h3>Assistant</h3>Chat about your code, or switch to <b>Agent</b> mode to let it read files and propose edits (you approve every write).<br><br>It uses <b>your own API key</b>, stored in this browser, and calls the provider directly. Nothing goes through our servers. Choose the provider with the <code>luma.ai.provider</code> setting.`
+  const empty = `<h3>Assistant</h3>Chat about your code, or switch to <b>Agent</b> mode to let it read files and propose edits (you approve every write).<br><br>It uses <b>your own account or API key</b>, stored in this browser, and calls the provider directly. Nothing goes through our servers. The default provider is <b>GitHub Models</b> (uses your GitHub sign-in); change it with the <code>luma.ai.provider</code> setting. This is not GitHub Copilot.`
 
   vs.window.registerWebviewViewProvider('luma.ai.chat', {
     resolveWebviewView(v) {
@@ -165,6 +172,13 @@ export function activateAi(vs: Vscode): void {
     await vs.commands.executeCommand('luma.ai.chat.focus')
     setTimeout(() => post({ type: 'prefill', text: prompt }), 400)
   }
+  // Like Copilot Chat, the assistant lives on the right. Show it once on the first visit.
+  try {
+    if (!localStorage.getItem('luma.ai.shown')) {
+      localStorage.setItem('luma.ai.shown', '1')
+      setTimeout(() => void vs.commands.executeCommand('luma.ai.chat.focus'), 1500)
+    }
+  } catch { /* storage blocked */ }
   vs.commands.registerCommand('luma.ai.open', () => vs.commands.executeCommand('luma.ai.chat.focus'))
   vs.commands.registerCommand('luma.ai.setApiKey', () => askKey())
   vs.commands.registerCommand('luma.ai.explain', () => focusWith('Explain this code.'))
@@ -176,7 +190,7 @@ export function activateAi(vs: Vscode): void {
     async provideInlineCompletionItems(doc, pos, _ctx, token) {
       if (!cfg().get<boolean>('inlineCompletions', false)) return
       const c = provider()
-      c.apiKey = getKey(c.provider)
+      c.apiKey = keyFor(cfg().get<string>('provider', 'github-models'))
       c.model = cfg().get<string>('completionModel', '').trim() || c.model
       if (!c.apiKey || !c.model) return
       await new Promise((r) => setTimeout(r, 450))

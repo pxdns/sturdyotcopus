@@ -18,6 +18,8 @@ export const lumaManifest = {
       { command: 'luma.github.closeRepository', title: 'Close Repository (use the local workspace)', category: 'GitHub' },
       { command: 'luma.github.syncNow', title: 'Sync Now', category: 'GitHub' },
       { command: 'luma.github.createBranch', title: 'Create Branch', category: 'GitHub' },
+      { command: 'luma.extensions.upload', title: 'Add Theme or Extension from File', category: 'Extensions' },
+      { command: 'luma.extensions.manageUploaded', title: 'Remove Uploaded Themes and Extensions', category: 'Extensions' },
       { command: 'luma.ai.open', title: 'Open Assistant', category: 'AI' },
       { command: 'luma.ai.setApiKey', title: 'Set API Key', category: 'AI' },
       { command: 'luma.ai.newChat', title: 'New Chat', category: 'AI' },
@@ -28,14 +30,14 @@ export const lumaManifest = {
       { command: 'luma.runner.open', title: 'Open Terminal', category: 'Remote Runner' },
       { command: 'luma.runner.configure', title: 'Set Server URL', category: 'Remote Runner' }
     ],
-    viewsContainers: { activitybar: [{ id: 'luma-ai', title: 'Assistant', icon: '$(sparkle)' }] },
+    viewsContainers: { secondarySidebar: [{ id: 'luma-ai', title: 'Assistant', icon: '$(sparkle)' }] },
     views: { 'luma-ai': [{ type: 'webview', id: 'luma.ai.chat', name: 'Assistant' }] },
     configuration: {
       title: 'Luma',
       properties: {
         'luma.github.syncDelaySeconds': { type: 'number', default: 10, minimum: 3, maximum: 600, description: 'Seconds after your last edit before changes are committed and pushed to GitHub.' },
-        'luma.ai.provider': { type: 'string', enum: ['anthropic', 'openai'], default: 'anthropic', description: 'anthropic: the Anthropic API. openai: any OpenAI-compatible chat completions endpoint (set luma.ai.baseUrl).' },
-        'luma.ai.model': { type: 'string', default: '', description: 'Model ID. Empty uses the provider default for Anthropic; required for OpenAI-compatible endpoints.' },
+        'luma.ai.provider': { type: 'string', enum: ['github-models', 'anthropic', 'openai'], default: 'github-models', description: 'github-models: GitHub Models, using your GitHub sign-in or a token. anthropic: the Anthropic API. openai: any OpenAI-compatible chat completions endpoint (set luma.ai.baseUrl).' },
+        'luma.ai.model': { type: 'string', default: '', description: 'Model ID. Empty uses a default: openai/gpt-4.1 for GitHub Models, claude-sonnet-5-5 for Anthropic. Required for other OpenAI-compatible endpoints.' },
         'luma.ai.baseUrl': { type: 'string', default: '', description: 'API base URL for the openai provider, for example https://api.openai.com/v1. The endpoint must allow browser requests (CORS).' },
         'luma.ai.inlineCompletions': { type: 'boolean', default: false, description: 'Suggest code as you type. Sends the code around your cursor to your provider after each pause, so it is off by default.' },
         'luma.ai.completionModel': { type: 'string', default: '', description: 'Model for inline suggestions. Empty uses luma.ai.model. A small, fast model is a good choice.' },

@@ -41,8 +41,9 @@
             <table class="table">
               <thead><tr><th>Provider</th><th>How it signs in</th></tr></thead>
               <tbody>
+                <tr><td>GitHub Models (default)</td><td>Your GitHub sign-in, or a token with the <code>models:read</code> permission that you paste in. Models are served by GitHub, not Copilot.</td></tr>
                 <tr><td>Anthropic</td><td>Your API key, stored in your browser.</td></tr>
-                <tr><td>OpenAI-compatible endpoints</td><td>Your API key and base URL (<code>luma.ai.baseUrl</code>). The endpoint must allow browser requests. GitHub Models can be used this way with a token you create for it.</td></tr>
+                <tr><td>OpenAI-compatible endpoints</td><td>Your API key and base URL (<code>luma.ai.baseUrl</code>). The endpoint must allow browser requests. GitHub Models also works this way.</td></tr>
               </tbody>
             </table>
             <p>Requests go from your browser directly to the provider you choose. We do not proxy them and we cannot see them.</p>
