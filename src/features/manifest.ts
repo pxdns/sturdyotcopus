@@ -8,6 +8,7 @@ export const lumaManifest = {
   engines: { vscode: '*' },
   contributes: {
     commands: [
+      { command: 'luma.shell.open', title: 'Open Shell', category: 'Terminal' },
       { command: 'luma.python.run', title: 'Run Python File', category: 'Python', icon: '$(play)' },
       { command: 'luma.python.stop', title: 'Stop Python', category: 'Python', icon: '$(debug-stop)' },
       { command: 'luma.python.restart', title: 'Restart Interpreter', category: 'Python' },

@@ -3,6 +3,7 @@ import type { Checkout } from '../github/checkout'
 import { activateAi } from './ai'
 import { activateGithub } from './github'
 import { activateGradle } from './gradle'
+import { activateShell } from './shell'
 import { activateUploads } from './uploads'
 import { activateJava } from './java'
 import { activatePython } from './python'
@@ -16,6 +17,7 @@ export interface LumaContext {
 /** Starts the built-in features once the workbench is initialised. */
 export function activateLuma(vs: typeof vscode, ctx: LumaContext): void {
   activatePython(vs)
+  activateShell(vs)
   activateJava(vs)
   activateUploads(vs)
   activateAi(vs)

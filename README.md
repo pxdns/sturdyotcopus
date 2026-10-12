@@ -8,6 +8,7 @@ marketplace and an optional remote runner for real terminals. No ads, no analyti
 * **Site** – the promotional pages are static HTML in the repo root (`index.html`, `features/`, `python/`, `java-gradle/`, `github/`, `ai/`, `extensions/`, `runner/`, `privacy/`, `get-started/`, `mission/`, `about/`, `roadmap/`). Shared header/footer live in `site/partials/`, status badges in `site.config.json`.
 * **IDE** – served at `/app/` (new tab, popup window, an `about:blank` host window, or install as a PWA from the site).
 * **Themes** – *Luma Charcoal* and *Luma Paper* (flat, charcoal and light grey) follow the OS light/dark setting; *Glass Dark/Light* are optional.
+* **Shell** – the default terminal is a bash-like shell that runs in the page on your workspace files (`ls cd cat grep find tree cp mv rm mkdir`, pipes, redirects, `&&`, globs, `python file.py` with `input()` typed in the terminal). It is not real bash and has no git, npm or JDK; those live in the Remote runner terminal.
 * **Python** – Pyodide, self-hosted, in a worker: run files, `input()`, stop, a REPL terminal, live syntax errors, outline, completion and hover.
 * **Java and Gradle** – parser-based syntax errors, outline, snippets and completion for Java; outline, snippets and inspections for `build.gradle`; *Gradle: Run Task* runs in the remote runner. A browser tab cannot compile or run Java.
 * **GitHub** – OAuth sign-in (no personal access tokens), *GitHub: Open Repository*, the last repository and open files restored on the next visit, edits committed to the branch as one atomic commit a few seconds after you stop typing and again when the tab is hidden or closing. Conflicts go to a side branch; nothing is overwritten.
@@ -164,6 +165,6 @@ The GitHub workspace, runner, Python and AI features were exercised with Playwri
 * Package versions of all `@codingame/monaco-vscode-*` packages are pinned to the same exact version (`37.3.11`),
   as the packages must match each other. `monaco-editor` and `vscode` are npm aliases to
   `@codingame/monaco-vscode-editor-api` and `@codingame/monaco-vscode-extension-api`, as in the official demo.
-* The built-in terminals are the Python REPL (in the page) and the remote runner (needs a server you run).
+* The built-in terminals are the in-page Luma shell, the Python REPL, and the remote runner (needs a server you run) for real bash.
 * Telemetry is off (`telemetry.telemetryLevel: "off"`, no telemetry service). At runtime the app only talks to
   your own origin (including the extension gallery API); `open-vsx.org` is contacted only by the build.

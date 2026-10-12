@@ -17,6 +17,7 @@ export function registerTerminalKind(kind: string, factory: ProcessFactory): voi
 }
 
 export const PROFILE_PYTHON = 'luma-python'
+export const PROFILE_SHELL = 'luma-shell'
 export const PROFILE_RUNNER = 'luma-runner'
 
 let nextProcessId = 1
@@ -32,6 +33,7 @@ export abstract class LineTerminalProcess extends SimpleTerminalProcess {
   private readonly history: string[] = []
   private historyIndex = 0
   private busy = false
+  private reader?: { buf: string; resolve: (line: string) => void }
 
   constructor(data: Emitter<string>) {
     super(nextProcessId++, nextProcessId, '/', data.event)
@@ -42,6 +44,11 @@ export abstract class LineTerminalProcess extends SimpleTerminalProcess {
   protected abstract onLine(line: string): Promise<void>
   protected abstract banner(): string
   protected interrupt(): void {}
+
+  /** While a command runs, reads one line typed in the terminal (for programs that ask for input). */
+  protected readLine(): Promise<string> {
+    return new Promise((resolve) => { this.reader = { buf: '', resolve } })
+  }
 
   protected write(text: string): void {
     this.data.fire(text.replace(/\r?\n/g, '\r\n'))
@@ -97,7 +104,13 @@ export abstract class LineTerminalProcess extends SimpleTerminalProcess {
     }
     for (const ch of chunk) {
       const code = ch.charCodeAt(0)
-      if (code === 13) {
+      if (this.busy) {
+        const r = this.reader
+        if (code === 3) { this.reader = undefined; this.interrupt() }
+        else if (r && code === 13) { this.reader = undefined; this.data.fire('\r\n'); r.resolve(r.buf) }
+        else if (r && (code === 127 || code === 8)) { if (r.buf) { r.buf = r.buf.slice(0, -1); this.data.fire('\b \b') } }
+        else if (r && code >= 32) { r.buf += ch; this.data.fire(ch) }
+      } else if (code === 13) {
         this.data.fire('\r\n')
         const entered = this.line
         this.line = ''
@@ -109,8 +122,6 @@ export abstract class LineTerminalProcess extends SimpleTerminalProcess {
           this.busy = false
           this.showPrompt()
         })
-      } else if (this.busy) {
-        if (code === 3) this.interrupt()
       } else if (code === 127 || code === 8) {
         if (this.cursor > 0) {
           this.line = this.line.slice(0, this.cursor - 1) + this.line.slice(this.cursor)
@@ -141,15 +152,16 @@ export abstract class LineTerminalProcess extends SimpleTerminalProcess {
 
 /** The terminal backend of the workbench: every terminal is a process implemented inside the IDE. */
 export class LumaTerminalBackend extends SimpleTerminalBackend {
-  override getDefaultSystemShell = async (): Promise<string> => PROFILE_PYTHON
+  override getDefaultSystemShell = async (): Promise<string> => PROFILE_SHELL
 
   override getProfiles = async () => [
-    { profileName: 'Python', path: PROFILE_PYTHON, isDefault: true, isAutoDetected: false },
+    { profileName: 'Shell', path: PROFILE_SHELL, isDefault: true, isAutoDetected: false },
+    { profileName: 'Python', path: PROFILE_PYTHON, isDefault: false, isAutoDetected: false },
     { profileName: 'Remote runner', path: PROFILE_RUNNER, isDefault: false, isAutoDetected: false }
   ]
 
   override createProcess = async (shellLaunchConfig: { executable?: string }, _cwd?: unknown, cols = 80, rows = 24): Promise<ITerminalChildProcess> => {
-    const factory = factories.get(shellLaunchConfig.executable ?? '') ?? factories.get(PROFILE_PYTHON)
+    const factory = factories.get(shellLaunchConfig.executable ?? '') ?? factories.get(PROFILE_SHELL)
     if (!factory) throw new Error('No terminal available')
     return factory({ cols, rows })
   }
