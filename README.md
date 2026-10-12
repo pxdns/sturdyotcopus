@@ -6,7 +6,7 @@ workbench (explorer, tabs, command palette, settings, extensions view, search, p
 in the browser. No server, no analytics, no telemetry, no third-party scripts.
 
 * **Themes** – a local **Glass Dark / Glass Light** theme plus themes downloaded from [Open VSX](https://open-vsx.org) at build time.
-* **Extensions** – the Extensions view searches **Open VSX** (not the Microsoft Marketplace). Only web-compatible extensions can be installed.
+* **Extensions** – the Extensions view is backed by **our own gallery API** (`/api/gallery`), serving a curated mirror of **web-compatible** [Open VSX](https://open-vsx.org) extensions. Extensions that can't run in a browser are filtered out at build time.
 * **Files** – an in-browser virtual file system (a small sample workspace) persisted in **IndexedDB**.
 * **Languages** – JS/TS, JSON, CSS, HTML, Markdown, C# grammars, with the TS/CSS/HTML/JSON language features running in web workers.
 
@@ -27,11 +27,13 @@ in **Project → Settings** if the build doesn't pick them up:
 
 `vercel.json` also sets `Cross-Origin-Opener-Policy: same-origin`, `Cross-Origin-Embedder-Policy: credentialless`
 and `Cross-Origin-Resource-Policy: cross-origin` on every response (needed for `SharedArrayBuffer`, used by the
-language-feature workers; `credentialless` still lets the app call Open VSX), long-lived caching for `/assets/*`,
+language-feature workers), long-lived caching for `/assets/*`,
 and an SPA rewrite to `/index.html`.
 
 The build needs outbound internet access to `open-vsx.org` (Vercel builds have it). If Open VSX is unreachable
-the build still succeeds; the failed extensions are logged and skipped.
+the build still succeeds; the failed extensions are logged and skipped, and the Extensions view is simply empty.
+
+`vercel.json` also routes `/api/gallery/*` to the serverless function `api/gallery.js` (see *Extension marketplace*).
 
 ## How it works
 
@@ -52,6 +54,44 @@ src/main.ts ── src/extensions.ts reads manifest.json and registers every ext
 * Extensions that only provide Node (`main`) code can't run in a browser: their declarative contributions (themes,
   grammars, snippets) are kept and the Node entry point is dropped.
 
+## Extension marketplace (custom gallery API)
+
+The Extensions view does not talk to Open VSX or the Microsoft Marketplace at runtime. It talks to this site:
+
+```
+build:   Open VSX search ─► scripts/build-catalog.mjs ─► public/gallery/{catalog.json, resources/**, assets/**}   (gitignored)
+runtime: workbench ──POST /api/gallery/extensionquery──► api/gallery.js ──reads──► /gallery/catalog.json
+         workbench ──GET  /gallery/resources/<publisher>/<name>/<version>/extension/...  (the extension's files)
+```
+
+`scripts/build-catalog.mjs` (run by `prebuild`/`predev`, or alone with `npm run catalog`):
+
+1. scans Open VSX by download count (`maxScan` candidates),
+2. keeps an extension only if it **can run in a browser**: it ships a `browser` entry point, or it is purely
+   declarative (themes, grammars, snippets, ...). Anything with a Node-only `main` entry point is dropped,
+3. keeps only extensions with an allowed open-source `license` (`allowedLicenses`),
+4. downloads and unzips the newest version of the top `maxExtensions`, within the size/file budgets,
+5. drops extensions whose `extensionDependencies` / `extensionPack` members are not in the catalog,
+6. writes `catalog.json` and the files the workbench loads.
+
+Tune it in **`catalog.config.json`**: `maxExtensions` (default 300), `maxScan`, `maxExtensionMB`, `maxTotalMB`,
+`maxFiles`, `minDownloads`, `allowedLicenses`, `include` (always add these IDs) and `exclude`. The IDs in
+`extensions.json` (the preinstalled themes) are always included.
+
+It is deliberately **not** "every extension": Open VSX holds tens of thousands, which would not fit in a repo or a
+Vercel deployment, and most of them need Node and cannot run in a browser. Raise `maxExtensions` if you want more,
+but watch the build time and the deployment's file count/size.
+
+`api/gallery.js` implements the part of the VS Code gallery protocol the workbench uses (`extensionquery` with
+search/category/tag/sort/paging, and `vscode/<publisher>/<name>/latest`). The query logic lives in
+`lib/gallery-query.js` and is shared with `vite dev` / `vite preview`, so `npm run dev` and `npm run preview`
+behave like production. Because we build the catalog ourselves there are no Marketplace signatures, so signature
+verification is switched off in `src/main.ts` (`transformExtensionGalleryManifest`). VS Code still asks users to
+trust a publisher before installing.
+
+Please be considerate to Open VSX: the builder uses a modest concurrency, retries with backoff, and identifies
+itself with a User-Agent. Each mirrored extension keeps its own license (included in its files).
+
 ## Add more themes
 
 1. Find the extension on <https://open-vsx.org> and take its ID (`publisher.name`, from the URL
@@ -71,7 +111,7 @@ src/main.ts ── src/extensions.ts reads manifest.json and registers every ext
 3. Commit and push. Vercel rebuilds, downloads the extension, and it shows up under
    **Preferences: Color Theme** (`Ctrl/Cmd+K Ctrl/Cmd+T`).
 
-Visitors can also install extensions themselves from the Extensions view; those live in their browser only.
+Visitors can also install any extension from the marketplace list in the Extensions view; those live in their browser only.
 
 ## Glass theme
 
@@ -92,7 +132,8 @@ Users can pick any theme afterwards; their choice is stored in their browser.
 npm install
 npm run dev        # fetches extensions, then starts Vite on :5173
 npm run build      # fetches extensions, then builds to dist/
-npm run preview    # serve dist/ (add COOP/COEP headers yourself; vercel.json does this in production)
+npm run preview    # serve dist/ incl. the gallery API and COOP/COEP headers
+npm run catalog    # rebuild only the extension catalog (node scripts/build-catalog.mjs [--force])
 npm run typecheck
 ```
 
@@ -102,5 +143,5 @@ npm run typecheck
   as the packages must match each other. `monaco-editor` and `vscode` are npm aliases to
   `@codingame/monaco-vscode-editor-api` and `@codingame/monaco-vscode-extension-api`, as in the official demo.
 * The terminal is not included (there is no backend to run a shell).
-* Telemetry is off (`telemetry.telemetryLevel: "off"`, no telemetry service), and no request is made at startup
-  to any host other than your own. The Extensions view contacts `open-vsx.org` only when used.
+* Telemetry is off (`telemetry.telemetryLevel: "off"`, no telemetry service). At runtime the app only talks to
+  your own origin (including the extension gallery API); `open-vsx.org` is contacted only by the build.

@@ -1,0 +1,17 @@
+{
+  "_comment": "Controls scripts/build-catalog.mjs, which mirrors web-compatible Open VSX extensions into public/gallery/ at build time.",
+  "openVsxUrl": "https://open-vsx.org",
+  "maxExtensions": 300,
+  "maxScan": 4000,
+  "maxExtensionMB": 8,
+  "maxTotalMB": 150,
+  "maxFiles": 10000,
+  "concurrency": 6,
+  "minDownloads": 0,
+  "allowedLicenses": [
+    "MIT", "Apache-2.0", "BSD-2-Clause", "BSD-3-Clause", "ISC", "MPL-2.0", "0BSD", "Unlicense", "CC0-1.0",
+    "EPL-2.0", "EPL-1.0", "LGPL-2.1", "LGPL-3.0", "GPL-2.0", "GPL-3.0", "AGPL-3.0", "Zlib", "BSL-1.0", "CC-BY-4.0"
+  ],
+  "include": [],
+  "exclude": []
+}

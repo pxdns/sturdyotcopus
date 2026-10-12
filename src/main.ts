@@ -131,11 +131,12 @@ async function start(): Promise<void> {
     productConfiguration: {
       nameShort: 'Web VS Code',
       nameLong: 'Web VS Code',
-      // Extensions come from Open VSX, not the Microsoft Marketplace
+      // Extensions come from our own gallery API (api/gallery.js), a curated mirror of web-compatible
+      // Open VSX extensions built by scripts/build-catalog.mjs - not the Microsoft Marketplace.
       extensionsGallery: {
-        serviceUrl: 'https://open-vsx.org/vscode/gallery',
-        resourceUrlTemplate: 'https://open-vsx.org/vscode/unpkg/{publisher}/{name}/{version}/{path}',
-        extensionUrlTemplate: 'https://open-vsx.org/vscode/gallery/{publisher}/{name}/latest',
+        serviceUrl: `${window.location.origin}/api/gallery`,
+        resourceUrlTemplate: `${window.location.origin}/gallery/resources/{publisher}/{name}/{version}/{path}`,
+        extensionUrlTemplate: `${window.location.origin}/api/gallery/vscode/{publisher}/{name}/latest`,
         controlUrl: '',
         nlsBaseUrl: ''
       }
@@ -146,7 +147,15 @@ async function start(): Promise<void> {
     {
       ...getLogServiceOverride(),
       ...getExtensionServiceOverride({ enableWorkerExtensionHost: true }),
-      ...getExtensionGalleryServiceOverride({ webOnly: true }),
+      ...getExtensionGalleryServiceOverride({
+        webOnly: true,
+        // The catalog is built and hosted by us (scripts/build-catalog.mjs), so there are no Marketplace
+        // signatures to verify; without this the workbench refuses to install every extension.
+        transformExtensionGalleryManifest: (manifest) =>
+          manifest == null
+            ? null
+            : { ...manifest, capabilities: { ...manifest.capabilities, signing: { allPublicRepositorySigned: false } } }
+      }),
       ...getFilesServiceOverride(),
       ...getConfigurationServiceOverride(),
       ...getKeybindingsServiceOverride(),

@@ -4,12 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "node scripts/fetch-extensions.mjs",
+    "predev": "node scripts/fetch-extensions.mjs && node scripts/build-catalog.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/fetch-extensions.mjs",
+    "prebuild": "node scripts/fetch-extensions.mjs && node scripts/build-catalog.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "catalog": "node scripts/build-catalog.mjs"
   },
   "engines": {
     "node": ">=20.19"
